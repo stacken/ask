@@ -1,9 +1,12 @@
 #!/bin/sh
 
+iface=bce0
+dns=8.8.8.8
+
 usage() {
 	echo "usage: createjail.sh -n name_of_jail -i ip -p path/to/www/root -h hostname_of_web_site"
 }
-#while getopts "n:i:p:" opt; do
+
 while getopts "n:i:p:h:" opt; do
 	case "$opt" in
 	n) name=$OPTARG ;;
@@ -32,7 +35,7 @@ echo "  host=${host}"
 read -p "Create jail (y/N) " REPLY
 if [ "$REPLY" = "y" ]; then
 	echo creating jail $name at $ip
-	ezjail-admin create $name 'bce0|10.0.0.1' 
+	ezjail-admin create $name "$iface|$ip"
 
 	echo creating /www directory
 	mkdir /usr/jails/$name/www
@@ -42,7 +45,7 @@ if [ "$REPLY" = "y" ]; then
 	mount -a
 
 	echo creating resolv.conf
-	echo nameserver 8.8.8.8 > /usr/jails/$name/etc/resolv.conf
+	echo nameserver $dns > /usr/jails/$name/etc/resolv.conf
 
 	echo starting jail $name
 	ezjail-admin start $name
