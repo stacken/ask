@@ -61,6 +61,7 @@ if [ "$REPLY" = "y" ]; then
 	ezjail-admin console -e 'service php-fpm start' $name
 
 	echo creating reverse proxy
+	mkdir -p /usr/local/etc/nginx/hosted_jails
 	cat > /usr/local/etc/nginx/hosted_jails/$name.conf \
 <<EOF
 server {
